@@ -10,8 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install tap
-        run: brew tap macfanpro/tap "$GITHUB_WORKSPACE"
+        run: |
+          brew tap macfanpro/tap "$GITHUB_WORKSPACE"
+          brew trust macfanpro/tap 2>/dev/null || true
       - name: Build
-        run: brew install --build-from-source macfanpro/tap/macfanpro
+        run: brew install --build-from-source macfanpro/tap/macfancontrol
       - name: Test
-        run: brew test macfanpro/tap/macfanpro
+        run: brew test macfanpro/tap/macfancontrol
