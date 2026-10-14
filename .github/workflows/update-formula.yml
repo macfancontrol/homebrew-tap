@@ -39,7 +39,7 @@ jobs:
           REQUESTED_TAG: ${{ inputs.tag }}
         run: |
           tag="$REQUESTED_TAG"
-          if [ -z "$tag" ]; then tag=$(gh release view -R macfanpro/macfanpro --json tagName --jq .tagName); fi
+          if [ -z "$tag" ]; then tag=$(gh release view -R macfancontrol/macfancontrol --json tagName --jq .tagName); fi
           [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Invalid release tag"; exit 1; }
           version=${tag#v}
           # The renamed source layout starts with the transition release.
@@ -48,7 +48,7 @@ jobs:
             echo "current=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          revision=$(gh api "repos/macfanpro/macfanpro/commits/$tag" --jq .sha)
+          revision=$(gh api "repos/macfancontrol/macfancontrol/commits/$tag" --jq .sha)
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "revision=$revision" >> "$GITHUB_OUTPUT"

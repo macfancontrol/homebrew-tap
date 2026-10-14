@@ -11,7 +11,7 @@ sudo macfancontrol install
 
 Homebrew 7 does not load formulae from third-party taps until they are trusted; `brew trust` is needed once.
 
-For updates and removal, see [MacFanControl](https://github.com/macfanpro/macfanpro).
+For updates and removal, see [MacFanControl](https://github.com/macfancontrol/macfancontrol).
 
 On Apple Silicon with macOS 14 or later, Homebrew installs a prebuilt bottle, so no Xcode is needed; elsewhere the formula builds the tagged source. It bundles the CLI, app and license notices. Root service installation is explicit (`sudo macfancontrol install`); Homebrew never runs privileged setup inside its build sandbox.
 
