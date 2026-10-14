@@ -3,7 +3,7 @@ name: Update formula
 # Follows MacFanControl's latest published release: points the formula at its tag,
 # builds and uploads a bottle, checks that Homebrew pours it, then commits.
 # Drafts are ignored, so a release is picked up only after it is published.
-# Runs hourly; to update right away: gh workflow run update-formula.yml -R macfanpro/homebrew-tap
+# Runs hourly; to update right away: gh workflow run update-formula.yml -R macfancontrol/homebrew-tap
 on:
   schedule:
     - cron: "17 * * * *"
@@ -80,15 +80,15 @@ jobs:
       - name: Build the bottle
         if: steps.latest.outputs.current != 'true'
         run: |
-          brew tap macfanpro/tap "$GITHUB_WORKSPACE"
+          brew tap macfancontrol/tap "$GITHUB_WORKSPACE"
           # Tapping clones the committed state; use the edited formula.
-          cp Formula/macfancontrol.rb "$(brew --repo macfanpro/tap)/Formula/macfancontrol.rb"
-          brew trust macfanpro/tap 2>/dev/null || true
-          brew install --build-bottle macfanpro/tap/macfancontrol
+          cp Formula/macfancontrol.rb "$(brew --repo macfancontrol/tap)/Formula/macfancontrol.rb"
+          brew trust macfancontrol/tap 2>/dev/null || true
+          brew install --build-bottle macfancontrol/tap/macfancontrol
           mkdir -p bottle && cd bottle
           brew bottle --json --no-rebuild \
-            --root-url="https://github.com/macfanpro/homebrew-tap/releases/download/macfancontrol-${{ steps.latest.outputs.version }}" \
-            macfanpro/tap/macfancontrol
+            --root-url="https://github.com/macfancontrol/homebrew-tap/releases/download/macfancontrol-${{ steps.latest.outputs.version }}" \
+            macfancontrol/tap/macfancontrol
 
       - name: Check and upload the bottle
         if: steps.latest.outputs.current != 'true'
@@ -114,7 +114,7 @@ jobs:
             gh release create "macfancontrol-$VERSION" "$asset" --title "macfancontrol $VERSION bottle" \
               --notes "Prebuilt Homebrew bottle for MacFanControl $VERSION (Apple Silicon, macOS 14 or later), so \`brew install macfancontrol\` needs no Xcode. Built from tag v$VERSION."
           fi
-          url="https://github.com/macfanpro/homebrew-tap/releases/download/macfancontrol-$VERSION/$asset"
+          url="https://github.com/macfancontrol/homebrew-tap/releases/download/macfancontrol-$VERSION/$asset"
           for i in $(seq 60); do
             [ "$(curl -sIL -o /dev/null -w '%{http_code}' "$url")" = 200 ] && exit 0
             sleep 5
@@ -139,7 +139,7 @@ jobs:
               "  # Prebuilt for Apple Silicon; the binaries target macOS 14, so the sonoma bottle\n"
               "  # serves every later macOS. Without it Homebrew builds from source with Xcode.\n"
               "  bottle do\n"
-              f'    root_url "https://github.com/macfanpro/homebrew-tap/releases/download/macfancontrol-{v}"\n'
+              f'    root_url "https://github.com/macfancontrol/homebrew-tap/releases/download/macfancontrol-{v}"\n'
               f'    sha256 arm64_sonoma: "{sha}"\n'
               "  end\n"
           )
@@ -147,11 +147,11 @@ jobs:
           open(p, "w").write(s)
           EOF
           sed -n '1,20p' Formula/macfancontrol.rb
-          cp Formula/macfancontrol.rb "$(brew --repo macfanpro/tap)/Formula/macfancontrol.rb"
-          brew uninstall macfanpro/tap/macfancontrol
-          brew install macfanpro/tap/macfancontrol 2>&1 | tee install.log
+          cp Formula/macfancontrol.rb "$(brew --repo macfancontrol/tap)/Formula/macfancontrol.rb"
+          brew uninstall macfancontrol/tap/macfancontrol
+          brew install macfancontrol/tap/macfancontrol 2>&1 | tee install.log
           grep -q "Pouring macfancontrol-$VERSION.arm64_sonoma.bottle.tar.gz" install.log
-          brew test macfanpro/tap/macfancontrol
+          brew test macfancontrol/tap/macfancontrol
           test "$("$(brew --prefix macfancontrol)/bin/macfancontrol" --version)" = "$VERSION"
 
       - name: Verify an existing MacFanPro bottle upgrades through the old command
@@ -159,11 +159,11 @@ jobs:
         env:
           VERSION: ${{ steps.latest.outputs.version }}
         run: |
-          brew uninstall macfanpro/tap/macfancontrol
-          tap=$(brew --repo macfanpro/tap)
+          brew uninstall macfancontrol/tap/macfancontrol
+          tap=$(brew --repo macfancontrol/tap)
           rm "$tap/Aliases/macfanpro" "$tap/formula_renames.json"
-          gh api 'repos/macfanpro/homebrew-tap/contents/Formula/macfanpro.rb?ref=56d0cb9ea902f471c064246a003a84dcd3c27af8' --jq .content | base64 --decode > "$tap/Formula/macfanpro.rb"
-          brew install macfanpro/tap/macfanpro
+          gh api 'repos/macfancontrol/homebrew-tap/contents/Formula/macfanpro.rb?ref=56d0cb9ea902f471c064246a003a84dcd3c27af8' --jq .content | base64 --decode > "$tap/Formula/macfanpro.rb"
+          brew install macfancontrol/tap/macfanpro
           test "$("$(brew --prefix macfanpro)/bin/macfanpro" --version)" = 0.2.3.63
           rm "$tap/Formula/macfanpro.rb"
           cp formula_renames.json "$tap/formula_renames.json"
@@ -171,7 +171,7 @@ jobs:
           HOMEBREW_NO_ASK=1 HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade macfanpro
           test "$("$(brew --prefix macfanpro)/bin/macfanpro" --version)" = "$VERSION"
           test "$(brew --prefix macfanpro)" = "$(brew --prefix macfancontrol)"
-          brew test macfanpro/tap/macfancontrol
+          brew test macfancontrol/tap/macfancontrol
 
       - name: Commit
         if: steps.latest.outputs.current != 'true'

@@ -9,7 +9,7 @@ class Macfancontrol < Formula
   # Prebuilt for Apple Silicon; the binaries target macOS 14, so the sonoma bottle
   # serves every later macOS. Without it Homebrew builds from source with Xcode.
   bottle do
-    root_url "https://github.com/macfanpro/homebrew-tap/releases/download/macfancontrol-0.2.3.64"
+    root_url "https://github.com/macfancontrol/homebrew-tap/releases/download/macfancontrol-0.2.3.64"
     sha256 arm64_sonoma: "bf9e665a00c78a1aea2f5d18d58ad26ac33e286fb1a2f200e888d4670e426ff8"
   end
 

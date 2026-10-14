@@ -3,8 +3,8 @@
 Homebrew packages for MacFanControl.
 
 ```bash
-brew tap macfanpro/tap
-brew trust macfanpro/tap
+brew tap macfancontrol/tap
+brew trust macfancontrol/tap
 brew install macfancontrol
 sudo macfancontrol install
 ```
@@ -24,3 +24,5 @@ gh workflow run update-formula.yml -R macfancontrol/homebrew-tap
 ```
 
 MacFanControl was formerly MacFanPro. Existing `macfanpro` installations migrate through Homebrew formula renaming; the old command and formula name remain compatibility aliases.
+
+The tap moved from `macfanpro/homebrew-tap` to `macfancontrol/homebrew-tap`. GitHub redirects the old repository and release URLs. Existing `macfanpro/tap` checkouts can continue to update; no uninstall is required. New installations should use `macfancontrol/tap`.
