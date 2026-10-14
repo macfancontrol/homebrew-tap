@@ -10,21 +10,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install tap
-        run: |
-          brew tap macfancontrol/tap "$GITHUB_WORKSPACE"
-          brew trust macfancontrol/tap 2>/dev/null || true
+        run: brew tap macfanpro/tap "$GITHUB_WORKSPACE"
       - name: Build
-        run: brew install --build-from-source macfancontrol/tap/macfancontrol
+        run: brew install --build-from-source macfanpro/tap/macfanpro
       - name: Test
-        run: brew test macfancontrol/tap/macfancontrol
-      - name: Verify the renamed tap pours its existing bottle
-        run: |
-          brew uninstall macfancontrol/tap/macfancontrol
-          brew install --force-bottle macfancontrol/tap/macfancontrol
-          brew test macfancontrol/tap/macfancontrol
-      - name: Verify old repository and bottle URLs redirect
-        run: |
-          old=$(git ls-remote https://github.com/macfanpro/homebrew-tap.git refs/heads/main | cut -f1)
-          new=$(git ls-remote https://github.com/macfancontrol/homebrew-tap.git refs/heads/main | cut -f1)
-          test -n "$old" && test "$old" = "$new"
-          curl --fail --location --head https://github.com/macfanpro/homebrew-tap/releases/download/macfancontrol-0.2.3.64/macfancontrol-0.2.3.64.arm64_sonoma.bottle.tar.gz
+        run: brew test macfanpro/tap/macfanpro
